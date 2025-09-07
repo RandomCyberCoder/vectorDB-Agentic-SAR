@@ -1,5 +1,5 @@
 chunking/data
-*.env
+**/*.env
 .qdrant_storage
-*__pycache__/
+**/__pycache__/
 qdrant_storage
