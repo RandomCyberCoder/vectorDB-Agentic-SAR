@@ -11,6 +11,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.models import PointStruct
 from qdrant_client.models import Filter, FieldCondition, MatchValue
+from sentence_transformers import SentenceTransformer
 
 
 client = QdrantClient(url="http://localhost:6333")
@@ -59,26 +60,39 @@ def create_collection():
 
 
 if __name__ == '__main__':
-    create_collection()
+    #assuming SAR_collection already exists
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    embedding = model.encode("Person with alzheimer lost in urban area").tolist()
     search_result = client.query_points(
-        collection_name="test_collection",
-        query=[0.2, 0.1, 0.9, 0.7],
+        collection_name="SAR_collection",
+        query=embedding,
         with_payload=True,
         limit=3
     ).points
+    
+    print([point.payload for point in search_result])
 
-    print(search_result)
+    # print([x for point in search_result for x in point.payload.dict()])
+    # create_collection()
+    # search_result = client.query_points(
+    #     collection_name="test_collection",
+    #     query=[0.2, 0.1, 0.9, 0.7],
+    #     with_payload=True,
+    #     limit=3
+    # ).points
 
-    search_result = client.query_points(
-        collection_name="test_collection",
-        query=[0.2, 0.1, 0.9, 0.7],
-        query_filter=Filter(
-            must=[FieldCondition(key="city", match=MatchValue(value="London"))]
-        ),
-        with_payload=True,
-        limit=3,
-    ).points
+    # print(search_result)
 
-    print(search_result)
-    client.delete_collection(collection_name="test_collection") 
-    print(f"Collection 'my_collection_name' deleted.")
+    # search_result = client.query_points(
+    #     collection_name="test_collection",
+    #     query=[0.2, 0.1, 0.9, 0.7],
+    #     query_filter=Filter(
+    #         must=[FieldCondition(key="city", match=MatchValue(value="London"))]
+    #     ),
+    #     with_payload=True,
+    #     limit=3,
+    # ).points
+
+    # print(search_result)
+    # client.delete_collection(collection_name="test_collection") 
+    # print(f"Collection 'my_collection_name' deleted.")
