@@ -8,7 +8,7 @@ load_dotenv()
 
 PDF_FILE_PATH = os.getenv("PDF_FILE_PATH", "chunking/data/Chunking.pdf")
 PDF_PASSWORD = os.getenv("PDF_PASSWORD", "")
-outfile = "chunking/data/extracted_pages.json"
+outfile = "chunking/data/extracted/extracted_pages.json"
 
 
 
