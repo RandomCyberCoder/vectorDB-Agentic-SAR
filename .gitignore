@@ -2,3 +2,4 @@ chunking/data
 *.env
 .qdrant_storage
 *__pycache__/
+qdrant_storage
