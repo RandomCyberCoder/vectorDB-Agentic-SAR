@@ -4,12 +4,14 @@ from xmlrpc import client
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.models import PointStruct
+from chunking.clean_text import clean_text
 
 client = QdrantClient(url="http://localhost:6333")
 COLLECTION_NAME = "SAR_collection"
 VECTOR_SIZE = 384  # Example vector size for models like all-MiniLM-L6-v2
 EXTRACTED_FILE_PATHS = [
-                        # "chunking/data/extracted/extracted_categories.json",
+                        "chunking/data/extracted/extracted_categories.json",
+                        "chunking/data/extracted/extracted_pages.json",
                         ]
 
 def create_collection():
@@ -50,7 +52,7 @@ def main():
 
     for embedding, data in zip(file_embeddings, EXTRACTED_FILE_PATHS):
         print(f"Embedding and uploading chunks from {data} to Qdrant...")
-        with open(data, "r") as f:
+        with open(data, "r", encoding="utf-8") as f:
             chunks = json.load(f)
             points = []
             offset = client.count(collection_name=COLLECTION_NAME).count

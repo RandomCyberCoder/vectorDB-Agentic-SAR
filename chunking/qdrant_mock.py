@@ -62,15 +62,26 @@ def create_collection():
 if __name__ == '__main__':
     #assuming SAR_collection already exists
     model = SentenceTransformer("all-MiniLM-L6-v2")
-    embedding = model.encode("Person with alzheimer lost in urban area").tolist()
+    summary = (
+    "The matched incidents involve searches for youth subjects engaged in outdoor activities such as hiking and hunting across different terrains—primarily mountainous and flat areas, with two incidents physically taking place in flat terrains. All three incidents resulted in successful outcomes, with subjects being found alive.\n\n"
+    "Key patterns relevant to the query include:\n"
+    "- Outcome: All cases involved active search efforts, aligning with the 'search' outcome specified.\n"
+    "- Terrain: Two incidents occurred on flat terrain, matching the 'flat' terrain criteria, while one involved mountainous terrain.\n"
+    "- Subject Category and Activity: All subjects were youths, consistent with the category specified, engaged in outdoor activities like hiking and hunting, which are common adventures for youth in search and rescue scenarios.\n"
+    "- Age and Well-being: The ages ranged from 8 to 15, with all subjects reported to be well, indicating effective rescue operations.\n\n"
+    "Overall, these incidents exemplify successful search efforts for young individuals involved in outdoor activities within flat terrains, directly corresponding to the search and rescue query focusing on youth in flat terrains.\n"
+    "Where to locate a missing person based on the summary above"
+    )
+    embedding = model.encode(summary).tolist()
     search_result = client.query_points(
         collection_name="SAR_collection",
         query=embedding,
         with_payload=True,
         limit=3
     ).points
-    
-    print([point.payload for point in search_result])
+
+    for point in [point.payload for point in search_result]:
+        print(point, "\n\n")
 
     # print([x for point in search_result for x in point.payload.dict()])
     # create_collection()
