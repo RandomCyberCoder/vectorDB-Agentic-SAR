@@ -77,7 +77,7 @@ if __name__ == '__main__':
         collection_name="SAR_collection",
         query=embedding,
         with_payload=True,
-        limit=3
+        limit=2
     ).points
 
     for point in [point.payload for point in search_result]:

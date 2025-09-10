@@ -11,7 +11,7 @@ COLLECTION_NAME = "SAR_collection"
 VECTOR_SIZE = 384  # Example vector size for models like all-MiniLM-L6-v2
 EXTRACTED_FILE_PATHS = [
                         "chunking/data/extracted/extracted_categories.json",
-                        "chunking/data/extracted/extracted_pages.json",
+                        # "chunking/data/extracted/extracted_pages.json",
                         ]
 
 def create_collection():
